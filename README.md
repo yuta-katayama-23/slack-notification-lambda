@@ -28,4 +28,10 @@ https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/sample-build-notifi
 
 ### Slack のメッセージの仕様
 
+#### blocks
+
 https://api.slack.com/reference/block-kit/blocks
+
+#### attachment
+
+https://api.slack.com/reference/messaging/attachments

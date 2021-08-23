@@ -30,24 +30,28 @@ exports.handler = async (event) => {
                     "type": "plain_text",
                     "text": "ビルド結果の通知"
                 }
-            },
+            }
+        ],
+        "attachments": [
             {
-                "type": "divider"
-            },
-            {
-                "type": "section",
-                "fields": [
+                color: `${event.detail["build-status"] === "SUCCEEDED" ? "#36a64f" : "#dc3545"}`,
+                blocks: [
                     {
-                        "type": "mrkdwn",
-                        "text": `*モジュール名（ビルドプロジェクト名）*\n${moduleName}\n(${pjName})`
-                    },
-                    {
-                        "type": "mrkdwn",
-                        "text": `*Deploy予定環境*\n${envName}`
-                    },
-                    {
-                        "type": "mrkdwn",
-                        "text": `*ビルドの結果*\n${event.detail["build-status"] === "SUCCEEDED" ? "成功" : "失敗"}`
+                        "type": "section",
+                        "fields": [
+                            {
+                                "type": "mrkdwn",
+                                "text": `*モジュール名（ビルドプロジェクト名）*\n${moduleName}\n(${pjName})`
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": `*Deploy予定環境*\n${envName}`
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": `*ビルドの結果*\n${event.detail["build-status"] === "SUCCEEDED" ? "成功" : "失敗"}`
+                            }
+                        ]
                     }
                 ]
             }
