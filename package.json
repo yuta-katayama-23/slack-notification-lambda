@@ -1,0 +1,15 @@
+{
+  "name": "slack-notification-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/execute-lambda.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "lambda-local": "^2.0.0"
+  }
+}
