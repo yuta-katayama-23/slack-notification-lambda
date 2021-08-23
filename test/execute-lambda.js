@@ -6,7 +6,10 @@ dotenv.config();
 const regex = /test/;
 
 const jsonPayload = {
-    test: "test"
+    detail: {
+        "build-status": "SUCCEEDED",
+        "project-name": "test-dev-develop-project1"
+    }
 }
 
 const main = async () => {

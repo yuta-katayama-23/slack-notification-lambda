@@ -20,3 +20,12 @@ https://app.slack.com/client/{workspack id}/{channel id}
 
 という URL になっているので、`{channel id}`の部分をコピペすればいい<br>
 参考：https://auto-worker.com/blog/?p=132
+
+### Code Build の Cloud Watch Event の Event オブジェクトの中身
+
+Code Build では その build の build status ごとに Cloud Watch Event で Event が発火するが、その Event オブジェクトの中身は以下に書かれている<br>
+https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/sample-build-notifications.html#sample-build-notifications-ref
+
+### Slack のメッセージの仕様
+
+https://api.slack.com/reference/block-kit/blocks
