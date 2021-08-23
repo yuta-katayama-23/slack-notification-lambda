@@ -1,5 +1,7 @@
 const lambdaLocal = require('lambda-local');
 const path = require("path");
+const dotenv = require('dotenv')
+dotenv.config();
 
 const regex = /test/;
 

@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "lambda-local": "^2.0.0"
+  },
+  "dependencies": {
+    "@slack/web-api": "^6.4.0"
   }
 }
