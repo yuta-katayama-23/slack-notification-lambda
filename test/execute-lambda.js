@@ -26,7 +26,7 @@ const jsonPayloadEcs = {
 const main = async () => {
     try {
         const response = await lambdaLocal.execute({
-            event: jsonPayload,
+            event: jsonPayloadEcs,
             lambdaPath: path.join(__dirname.replace(regex, ""), 'index.js'),
             timeoutMs: 3000
         })
