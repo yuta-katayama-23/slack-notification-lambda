@@ -26,6 +26,10 @@ https://app.slack.com/client/{workspack id}/{channel id}
 Code Build では その build の build status ごとに Cloud Watch Event で Event が発火するが、その Event オブジェクトの中身は以下に書かれている<br>
 https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/sample-build-notifications.html#sample-build-notifications-ref
 
+### ECS のサービスデプロイ状態が変更された際の Cloud Watch Event の Event オブジェクトの中身
+
+https://docs.aws.amazon.com/ja_jp/AmazonECS/latest/developerguide/ecs_cwe_events.html#ecs_service_deployment_events
+
 ### Slack のメッセージの仕様
 
 #### blocks

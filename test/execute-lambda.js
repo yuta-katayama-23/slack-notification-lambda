@@ -6,9 +6,20 @@ dotenv.config();
 const regex = /test/;
 
 const jsonPayload = {
+    "detail-type": "CodeBuild Build State Change",
     detail: {
         "build-status": "SUCCEEDED",
         "project-name": "test-dev-develop-project1"
+    }
+}
+
+const jsonPayloadEcs = {
+    "detail-type": "ECS Deployment State Change",
+    resources: [
+        "arn:aws:ecs:ap-northeast-1:111122223333:service/hoge-cluster/dev-hoge-module"
+    ],
+    detail: {
+        eventName: "SERVICE_DEPLOYMENT_COMPLETED"
     }
 }
 
