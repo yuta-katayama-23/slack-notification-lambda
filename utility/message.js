@@ -1,4 +1,4 @@
-const config = require("../config/cloud-front-disribution.json")
+const config = require("../config/index.js")
 
 const envRegex = new RegExp(process.env.ENV_REGEX);
 const moduleRegex = new RegExp(process.env.MODULE_REGEX);
@@ -117,7 +117,8 @@ const createEcsDeployResultMsg = (event) => {
 }
 
 const createCloudFrontDeployResultMsg = (invalidationResult) => {
-    const deployDestri = config.filter(el => el.distributionId === invalidationResult.distributionId)[0];
+    const deployDestri = config.distributions.filter(
+        el => el.distributionId === invalidationResult.distributionId)[0];
 
     const msg = {
         text: "fallback messgae",

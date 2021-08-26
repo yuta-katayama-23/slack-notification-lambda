@@ -67,16 +67,89 @@ Cloud Trail に記録されるオブジェクト（JSON）とは以下の形式�
 
 ```json
 {
+  "eventVersion": "1.05",
+  "userIdentity": {
+    "type": "IAMUser",
+    "principalId": "AIDAJDPLRKLG7UEXAMPLE",
+    "arn": "arn:aws:iam::123456789012:user/Mary_Major",
+    "accountId": "123456789012",
+    "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+    "userName": "Mary_Major",
+    "sessionContext": {
+      "sessionIssuer": {},
+      "webIdFederationData": {},
+      "attributes": {
+        "mfaAuthenticated": "false",
+        "creationDate": "2019-06-18T22:28:31Z"
+      }
+    },
+    "invokedBy": "signin.amazonaws.com"
+  },
+  "eventTime": "2019-06-19T00:18:31Z",
+  "eventSource": "cloudtrail.amazonaws.com",
+  "eventName": "StartLogging",
+  "awsRegion": "us-east-2",
+  "sourceIPAddress": "203.0.113.64",
+  "userAgent": "signin.amazonaws.com",
+  "requestParameters": {
+    "name": "arn:aws:cloudtrail:us-east-2:123456789012:trail/My-First-Trail"
+  },
+  "responseElements": null,
+  "requestID": "ddf5140f-EXAMPLE",
+  "eventID": "7116c6a1-EXAMPLE",
+  "readOnly": false,
+  "eventType": "AwsApiCall",
+  "recipientAccountId": "123456789012"
+}
+```
+
+そして Cloud Trail のイベントオブジェクトを Cloud Watch Event で捕捉する（`AWS API Call via CloudTrail`）ので、以下のような Event オブジェクトを Lambda 関数などで受け取る事になる
+
+```json
+{
+  "version": "0",
+  "id": "c030038d-8c4d-6141-9545-00ff7b7153EX",
+  "detail-type": "AWS API Call via CloudTrail",
+  "source": "aws.cloudfront",
+  "account": "123456789012",
+  "time": "2017-09-01T16:14:28Z",
+  "region": "us-west-1",
+  "resources": [],
+  "detail": {
     "eventVersion": "1.05",
-    "userIdentity": {...},
+    "userIdentity": {
+      "type": "IAMUser",
+      "principalId": "AIDAJDPLRKLG7UEXAMPLE",
+      "arn": "arn:aws:iam::123456789012:user/Mary_Major",
+      "accountId": "123456789012",
+      "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+      "userName": "Mary_Major",
+      "sessionContext": {
+        "sessionIssuer": {},
+        "webIdFederationData": {},
+        "attributes": {
+          "mfaAuthenticated": "false",
+          "creationDate": "2019-06-18T22:28:31Z"
+        }
+      },
+      "invokedBy": "signin.amazonaws.com"
+    },
     "eventTime": "2019-06-19T00:18:31Z",
     "eventSource": "cloudtrail.amazonaws.com",
     "eventName": "StartLogging",
     "awsRegion": "us-east-2",
     "sourceIPAddress": "203.0.113.64",
     "userAgent": "signin.amazonaws.com",
-    "requestParameters": {...},
-    "responseElements": {...}
+    "requestParameters": {
+      "name": "arn:aws:cloudtrail:us-east-2:123456789012:trail/My-First-Trail"
+    },
+    "responseElements": null,
+    "requestID": "ddf5140f-EXAMPLE",
+    "eventID": "7116c6a1-EXAMPLE",
+    "readOnly": false,
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "123456789012"
+  }
 }
 ```
 

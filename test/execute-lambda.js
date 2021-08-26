@@ -3,6 +3,8 @@ const path = require("path");
 const dotenv = require('dotenv')
 dotenv.config();
 
+const config = require("../config/index.js")
+
 const regex = /test/;
 
 const jsonPayload = {
@@ -23,10 +25,27 @@ const jsonPayloadEcs = {
     }
 }
 
+// locationのURLはテストの時に
+const jsonPayloadCloudFront = {
+    "detail-type": "AWS API Call via CloudTrail",
+    resources: [],
+    detail: {
+        eventName: "CreateInvalidation",
+        eventSource: "cloudfront.amazonaws.com",
+        responseElements: {
+            "location": process.env.TEST_CF_URL
+        }
+    }
+}
+
 const main = async () => {
+    config.distributions = [{
+        "distributionId": process.env.TEST_DISTRI_ID,
+        "env": "dev"
+    }];
     try {
         const response = await lambdaLocal.execute({
-            event: jsonPayloadEcs,
+            event: jsonPayloadCloudFront,
             lambdaPath: path.join(__dirname.replace(regex, ""), 'index.js'),
             timeoutMs: 3000
         })

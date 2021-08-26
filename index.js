@@ -9,8 +9,8 @@ exports.handler = async (event) => {
     const statusCode = { statusCode: 200 }
 
     // Cloud Trail Event Object
-    if (event.eventSource) {
-        const result = await shouldInvaliCompleted(event.responseElements);
+    if (event.detail.eventSource) {
+        const result = await shouldInvaliCompleted(event.detail.responseElements);
         msgObj = createCloudFrontDeployResultMsg(result);
     } else {
         switch (event["detail-type"]) {
