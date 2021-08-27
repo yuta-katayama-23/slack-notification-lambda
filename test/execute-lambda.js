@@ -3,7 +3,7 @@ const path = require("path");
 const dotenv = require('dotenv')
 dotenv.config();
 
-const config = require("../config/index.js")
+const config = require("../config")
 
 const regex = /test/;
 

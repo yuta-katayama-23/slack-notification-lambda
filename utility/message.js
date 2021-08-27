@@ -1,4 +1,4 @@
-const config = require("../config/index.js")
+const config = require("../config")
 
 const envRegex = new RegExp(process.env.ENV_REGEX);
 const moduleRegex = new RegExp(process.env.MODULE_REGEX);
