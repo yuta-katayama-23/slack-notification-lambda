@@ -26,7 +26,7 @@ const shouldInvaliCompleted = async (invalidation) => {
             invaliResult = "Completed";
             break;
         }
-        sleep(3000);
+        await sleep(3000);
     }
 
     return { result: invaliResult ? invaliResult : "Failed", distributionId };
