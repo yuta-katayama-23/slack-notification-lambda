@@ -4,12 +4,20 @@ const envRegex = new RegExp(process.env.ENV_REGEX);
 const moduleRegex = new RegExp(process.env.MODULE_REGEX);
 const ecsEnvRegex = new RegExp(process.env.ECS_ENV_REGEX);
 const ecsServiceRegex = new RegExp(process.env.ECS_SERVICE_REGEX);
+const lambdaRegex = new RegExp(process.env.LAMBDA_REGEX);
 
 const mention = {
     "type": "section",
     "text": {
         "type": "mrkdwn",
         "text": "<!channel>"
+    }
+};
+const release = {
+    "type": "header",
+    "text": {
+        "type": "plain_text",
+        "text": "リリース作業の結果の通知"
     }
 };
 
@@ -79,13 +87,7 @@ const createEcsDeployResultMsg = (event) => {
         text: "fallback messgae",
         blocks: [
             mention,
-            {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": "リリース作業の結果の通知"
-                }
-            }
+            release
         ],
         "attachments": [
             {
@@ -124,13 +126,7 @@ const createCloudFrontDeployResultMsg = (invalidationResult) => {
         text: "fallback messgae",
         blocks: [
             mention,
-            {
-                "type": "header",
-                "text": {
-                    "type": "plain_text",
-                    "text": "リリース作業の結果の通知"
-                }
-            }
+            release
         ],
         "attachments": [
             {
@@ -161,8 +157,47 @@ const createCloudFrontDeployResultMsg = (invalidationResult) => {
     return msg;
 }
 
+const createLambdaDeployResultMsg = (event) => {
+    const responseObj = event.detail.responseElements;
+
+    const msg = {
+        text: "fallback messgae",
+        blocks: [
+            mention,
+            release
+        ],
+        "attachments": [
+            {
+                color: `${responseObj.lastUpdateStatus === "Successful" ? "#36a64f" : "#dc3545"}`,
+                blocks: [
+                    {
+                        "type": "section",
+                        "fields": [
+                            {
+                                "type": "mrkdwn",
+                                "text": `*環境名*\n${responseObj.functionName.match(lambdaRegex)}`
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": "*サービス名*\nLambdaBatch"
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": `*作業の結果*\n${responseObj.lastUpdateStatus === "Successful" ? "リリース作業が完了致しました" : "リリース作業が失敗しています、確認してください"}`
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+    return msg;
+}
+
 module.exports = {
     createBuildResultMsg,
     createEcsDeployResultMsg,
-    createCloudFrontDeployResultMsg
+    createCloudFrontDeployResultMsg,
+    createLambdaDeployResultMsg
 }

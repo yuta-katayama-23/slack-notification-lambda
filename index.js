@@ -1,5 +1,5 @@
 const { WebClient } = require('@slack/web-api');
-const { createBuildResultMsg, createEcsDeployResultMsg, createCloudFrontDeployResultMsg } = require('./utility/message')
+const { createBuildResultMsg, createEcsDeployResultMsg, createCloudFrontDeployResultMsg, createLambdaDeployResultMsg } = require('./utility/message')
 const { shouldInvaliCompleted } = require("./service")
 
 const web = new WebClient(process.env.SLACK_OAUTH_TOKEN);
@@ -10,8 +10,15 @@ exports.handler = async (event) => {
 
     // Cloud Trail Event Object
     if (event.detail.eventSource) {
-        const result = await shouldInvaliCompleted(event.detail.responseElements);
-        msgObj = createCloudFrontDeployResultMsg(result);
+        switch (event.detail.eventName) {
+            case "CreateInvalidation":
+                const result = await shouldInvaliCompleted(event.detail.responseElements);
+                msgObj = createCloudFrontDeployResultMsg(result);
+                break;
+            case "PublishVersion20150331":
+                msgObj = createLambdaDeployResultMsg(event)
+                break;
+        }
     } else {
         switch (event["detail-type"]) {
             case "CodeBuild Build State Change":

@@ -103,7 +103,8 @@ Cloud Trail に記録されるオブジェクト（JSON）とは以下の形式�
 }
 ```
 
-そして Cloud Trail のイベントオブジェクトを Cloud Watch Event で捕捉する（`AWS API Call via CloudTrail`）ので、以下のような Event オブジェクトを Lambda 関数などで受け取る事になる
+そして Cloud Trail のイベントオブジェクトを Cloud Watch Event で捕捉する（`AWS API Call via CloudTrail`）ので、以下のような Event オブジェクトを Lambda 関数などで受け取る事になる<br>
+以下は Cloud Front の CloudTrail に記録される Event オブジェクトではない
 
 ```json
 {
@@ -180,6 +181,75 @@ JSON を見ると分かるが、`CreateInvalidation`が API として Call さ�
 
 ・参考：[CloudFront Client - AWS SDK for JavaScript v3](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-cloudfront/index.html)
 ・参考：[Class GetInvalidationCommand](https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-cloudfront/classes/getinvalidationcommand.html)
+
+### Lambda の Publish Version が実行された際の Cloud Trail の Event オブジェクトの中身
+
+Lambda の場合は、Cloud Front と同様に Cloud Watch Event で捕捉できるのは、`AWS API Call via CloudTrail`（Cloud Trail に記録されるイベント）だけなので、Cloud Trail で記録されるイベントを見ていく必要がある
+
+CloudTrail での Lambda の API Call の記録については、[CloudTrail 内の AWS Lambda 情報](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/logging-using-cloudtrail.html)に書かれている通りで、その API 一覧については[API Reference > Actions](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/API_Operations.html)に書かれている
+
+今回は[`PublishVersion`](https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CreateInvalidation.html)で、その オブジェクトの中身は[PublishVersion > Response Elements](https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/API_PublishVersion.html#API_PublishVersion_ResponseElements)にどんなキーが含まれるか？が書かれている<br>
+この中身が`responseElements`になる<br>
+※注意事項としては実際に CloudTrail に出力される PublishVersion の request/response（CloudTrail の requestParameters/responseElements） は*キャメルケース*になる<br>
+
+CloudFront と同様に、Cloud Trail のイベントオブジェクトを Cloud Watch Event で捕捉する（`AWS API Call via CloudTrail`）ので、以下のような Event オブジェクトを Lambda 関数などで受け取る事になる
+
+```json
+{
+  "version": "0",
+  "id": "c030038d-8c4d-6141-9545-00ff7b7153EX",
+  "detail-type": "AWS API Call via CloudTrail",
+  "source": "aws.cloudfront",
+  "account": "123456789012",
+  "time": "2017-09-01T16:14:28Z",
+  "region": "us-west-1",
+  "resources": [],
+  "detail": {
+    "eventVersion": "1.05",
+    "userIdentity": {...},
+    "eventTime": "2019-06-19T00:18:31Z",
+    "eventSource": "lambda.amazonaws.com",
+    "eventName": "PublishVersion20150331",
+    "awsRegion": "us-east-2",
+    "sourceIPAddress": "203.0.113.64",
+    "userAgent": "aws-sdk-js/...",
+    "requestParameters": {
+      "functionName": "hoge"
+    },
+    "responseElements": {
+      "tracingConfig": {
+          "mode": "PassThrough"
+      },
+      "codeSha256": "dBG9m8SGdmlEjw/JYXlhhvCrAv5TxvXsbL/RMr0fT/I=",
+      "functionName": "my-function",
+      "codeSize": 294,
+      "revisionId": "f31d3d39-cc63-4520-97d4-43cd44c94c20",
+      "memorySize": 128,
+      "functionArn": "arn:aws:lambda:us-west-2:123456789012:function:my-function:3",
+      "version": "3",
+      "role": "arn:aws:iam::123456789012:role/service-role/MyTestFunction-role-zgur6bf4",
+      "timeout": 3,
+      "lastModified": "2019-09-23T18:32:33.857+0000",
+      "handler": "my-function.handler",
+      "runtime": "nodejs10.x",
+      "description": "",
+      "lastUpdateStatus": "Successful"
+    },
+    "requestID": "ddf5140f-EXAMPLE",
+    "eventID": "7116c6a1-EXAMPLE",
+    "readOnly": false,
+    "eventType": "AwsApiCall",
+    "recipientAccountId": "123456789012"
+  }
+}
+```
+
+### 各サービスの何らかのイベントでトリガーする設定について
+
+基本的には、各サービスの API Reference に書かれている API は全て CloudTrail で記録される対象になるので、それで Event を捕捉しそれをトリガーにする事は可能
+
+CloudTrail で捕捉されるイベントの Event オブジェクトのついては[CloudTrail ログイベントリファレンス](https://docs.aws.amazon.com/ja_jp/awscloudtrail/latest/userguide/cloudtrail-event-reference.html)<br>
+このオブジェクトが Cloud Watch Event の`detail`キーの中身になる
 
 ### Slack のメッセージの仕様
 

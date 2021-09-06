@@ -38,6 +38,19 @@ const jsonPayloadCloudFront = {
     }
 }
 
+const jsonPayloadLambda = {
+    "detail-type": "AWS API Call via CloudTrail",
+    resources: [],
+    detail: {
+        eventName: "PublishVersion20150331",
+        eventSource: "lambda.amazonaws.com",
+        responseElements: {
+            "functionName": "dev-my-function",
+            "lastUpdateStatus": "Successful"
+        }
+    }
+}
+
 const main = async () => {
     config.distributions = [{
         "distributionId": process.env.TEST_DISTRI_ID,
@@ -45,7 +58,7 @@ const main = async () => {
     }];
     try {
         const response = await lambdaLocal.execute({
-            event: jsonPayloadCloudFront,
+            event: jsonPayloadLambda,
             lambdaPath: path.join(__dirname.replace(regex, ""), 'index.js'),
             timeoutMs: 3000
         })
